@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+client/dist/
+
+# Vercel
+.vercel/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Smoke test artifacts (generated)
+client/smoke.cjs
+
+# Logs & OS noise
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
