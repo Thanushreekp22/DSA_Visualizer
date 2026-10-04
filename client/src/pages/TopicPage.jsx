@@ -3,9 +3,11 @@ import { Link, useParams } from "react-router-dom";
 import { topics, topicTheory } from "../data/topics";
 import { topicLessons } from "../data/topicLessons";
 import { questionData } from "../data/questionData";
+import { topicCheatSheets } from "../data/topicCheatSheets";
 import QuestionSidebar from "../components/QuestionSidebar";
 import QuestionWorkspace from "../components/QuestionWorkspace";
 import TheoryViz from "../components/TheoryViz";
+import TopicCheatSheet from "../components/TopicCheatSheet";
 
 function TopicPage() {
   const { topicId } = useParams();
@@ -31,8 +33,15 @@ function TopicPage() {
     );
   }
 
+  const sheet = topicCheatSheets[topic.id];
+  const accent = sheet && sheet.accent;
+
   return (
-    <div className="topic-page">
+    <div
+      className="topic-page"
+      data-topic={topic.id}
+      style={accent ? { "--topic-accent": accent } : undefined}
+    >
       <header className="topic-header">
         <div className="topic-header-text">
           <h2>{topic.name}</h2>
@@ -49,25 +58,28 @@ function TopicPage() {
             questions={questions}
             selectedQuestion={selectedQuestion}
             onSelect={setSelectedQuestion}
-            onClose={selectedQuestion ? () => setSidebarOpen(false) : null}
+            onClose={() => setSidebarOpen(false)}
           />
         )}
 
         <section className="topic-content">
-          {selectedQuestion && (
+          {!sidebarOpen && (
             <button
               className="sidebar-toggle-btn"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              aria-expanded={sidebarOpen}
+              onClick={() => setSidebarOpen(true)}
+              aria-expanded={false}
             >
-              {sidebarOpen ? "⟨ Hide Questions" : "☰ Show Questions"}
+              ☰ Show Questions
             </button>
           )}
           {selectedQuestion ? (
             <QuestionWorkspace question={selectedQuestion} />
           ) : (
             <div className="topic-theory">
-              <h2>{topic.name}</h2>
+              <TopicCheatSheet topicId={topic.id} />
+              <h2>
+                {sheet ? "Detailed Theory" : topic.name}
+              </h2>
               {lesson ? (
                 <>
                   <p className="theory-intro">{lesson.intro}</p>

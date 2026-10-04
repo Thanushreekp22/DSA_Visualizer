@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { topicCheatSheets } from "../data/topicCheatSheets";
 
 function TopicCard({ topic, index }) {
   const navigate = useNavigate();
   const [pressed, setPressed] = useState(false);
+  const sheet = topicCheatSheets[topic.id];
+  const accent = sheet && sheet.accent;
 
   function go() {
     setPressed(true);
@@ -22,6 +25,7 @@ function TopicCard({ topic, index }) {
       role="link"
       tabIndex={0}
       aria-label={`Open ${topic.name} theory`}
+      style={accent ? { "--topic-accent": accent } : undefined}
       className={`topic-card${pressed ? " topic-card-pressed" : ""}`}
       onClick={go}
       onKeyDown={onKey}
